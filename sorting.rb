@@ -1,5 +1,9 @@
 require 'pry'
 
+#the compare function master version involves nested loop, which is not ideal. 
+#I attempted to work on this approach to avoid that. 
+#Therefore I branched out this version. 
+
 class Sorting
   def initialize boxes
     @boxes = boxes
