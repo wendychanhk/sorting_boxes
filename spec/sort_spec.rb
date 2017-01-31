@@ -3,7 +3,18 @@ require 'spec_helper'
 describe Sorting do
   describe "#compare" do
     context "find out what boxes users can get so that they won't get repeated contents" do
-      let(:sort) { Sorting.new(boxes) }
+      before do 
+
+      @boxes = 
+        [{code: 'gr1', contents: ['1a', '1b']},
+         {code: 'gr2', contents: ['1a', '2b']},
+         {code: 'gr3', contents: ['1b', '2c']},
+         {code: 'gr4', contents: ['2c', '3c']},
+         {code: 'gr5', contents: ['3b', '1c']}]
+
+        @sorted_boxes = Sorting.new(@boxes) 
+
+      end 
 
       let(:users) do 
         [{ name: 'Steve', received_contents: ['1a', '1b', '3c'] },
@@ -17,16 +28,8 @@ describe Sorting do
          { name: 'Thomas', received_contents: ['3c', '2b', '1a'] }]
       end 
 
-      let(:boxes) do 
-        [{code: 'gr1', contents: ['1a', '1b']},
-         {code: 'gr2', contents: ['1a', '2b']},
-         {code: 'gr3', contents: ['1b', '2c']},
-         {code: 'gr4', contents: ['2c', '3c']},
-         {code: 'gr5', contents: ['3b', '1c']}]
-      end 
-
       let(:expected_boxes) do 
-        [{:name=>"Steve", :possible_boxes=>["gr5", "gr4"]}, 
+        [{:name=>"Steve", :possible_boxes=>["gr5"]}, 
          {:name=>"Virginie", :possible_boxes=>["gr1", "gr3", "gr5"]}, 
          {:name=>"Fiona", :possible_boxes=>["gr2", "gr4"]}, 
          {:name=>"Jenny", :possible_boxes=>["gr2"]}, 
@@ -40,20 +43,16 @@ describe Sorting do
       it "return array of possible boxes to each user that have unique contents" do
         users_possible_boxes = []
         users.each do |user|
-          users_possible_boxes << {name: user[:name], possible_boxes: sort.compare(user)}
+          users_possible_boxes << {name: user[:name], possible_boxes: @sorted_boxes.compare(user)}
         end
-        expect(users_possible_boxes).to contain_exactly (expected_boxes)
+        expect(users_possible_boxes).to match_array(expected_boxes)
       end
 
-      it "return array of possible boxes that does not include contents received by user previously" do
-        users.each do |user|
-          boxes.map do |box|
-            if sort.compare(user).include? box[:code] 
-              expect(user[:received_contents]).not_to include(box[:contents])
-            end 
-          end 
-        end
-      end
+      it "return an expected array of boxs when tested with an individual user" do
+        test_user = {name: "ABC", received_contents: ['1a', '1b', '3c']}
+        expected_result = {:name=>"ABC", :expected_boxes_testing=>["gr5"]}
+        expect(@sorted_boxes.compare(test_user)).to match_array expected_result[:expected_boxes_testing]
+      end 
     end 
   end 
 end
