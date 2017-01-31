@@ -26,7 +26,7 @@ describe Sorting do
       end 
 
       let(:expected_boxes) do 
-        [{:name=>"Steve", :possible_boxes=>["gr5"]}, 
+        [{:name=>"Steve", :possible_boxes=>["gr5", "gr4"]}, 
          {:name=>"Virginie", :possible_boxes=>["gr1", "gr3", "gr5"]}, 
          {:name=>"Fiona", :possible_boxes=>["gr2", "gr4"]}, 
          {:name=>"Jenny", :possible_boxes=>["gr2"]}, 
@@ -42,7 +42,7 @@ describe Sorting do
         users.each do |user|
           users_possible_boxes << {name: user[:name], possible_boxes: sort.compare(user)}
         end
-        expect(users_possible_boxes).to match_array (expected_boxes)
+        expect(users_possible_boxes).to contain_exactly (expected_boxes)
       end
 
       it "return array of possible boxes that does not include contents received by user previously" do
