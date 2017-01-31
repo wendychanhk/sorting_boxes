@@ -25,7 +25,7 @@ describe Sorting do
          {code: 'gr5', contents: ['3b', '1c']}]
       end 
 
-      let(:users_possible_boxes) do 
+      let(:expected_boxes) do 
         [{:name=>"Steve", :possible_boxes=>["gr5"]}, 
          {:name=>"Virginie", :possible_boxes=>["gr1", "gr3", "gr5"]}, 
          {:name=>"Fiona", :possible_boxes=>["gr2", "gr4"]}, 
@@ -38,7 +38,7 @@ describe Sorting do
       end 
  
       it "find out what boxes users can get so that they won't get repeated contents" do
-        expect(sort.compare).to match_array (users_possible_boxes)
+        expect(sort.compare).to match_array (expected_boxes)
       end
     end 
   end 

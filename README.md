@@ -53,7 +53,7 @@ It will return this in console:
 {:name=>"Thomas", :possible_boxes=>["gr3", "gr5"]}]
 ```
 
-## Running the tests separately
+## Running the tests
 
 To run the Rspec test, run this in console: 
 
