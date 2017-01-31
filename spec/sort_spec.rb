@@ -37,12 +37,22 @@ describe Sorting do
          {:name=>"Thomas", :possible_boxes=>["gr3", "gr5"]}]
       end 
  
-      it "return array of boxes to each user that have unique contents" do
+      it "return array of possible boxes to each user that have unique contents" do
         users_possible_boxes = []
         users.each do |user|
           users_possible_boxes << {name: user[:name], possible_boxes: sort.compare(user)}
         end
         expect(users_possible_boxes).to match_array (expected_boxes)
+      end
+
+      it "return array of possible boxes that does not include contents received by user previously" do
+        users.each do |user|
+          boxes.map do |box|
+            if sort.compare(user).include? box[:code] 
+              expect(user[:received_contents]).not_to include(box[:contents])
+            end 
+          end 
+        end
       end
     end 
   end 
