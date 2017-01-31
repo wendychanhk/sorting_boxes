@@ -2,27 +2,22 @@ require 'pry'
 require 'rspec/autorun'
 
 class Sorting
-  def initialize users, boxes 
-    @users = users 
-    @boxes = boxes 
-  end 
-
-  def compare 
-    users_possible_boxes = []
-    @users.each do |user| 
-      possible_boxes = []
+  def initialize boxes
+    @boxes = boxes
+  end
+  
+  def compare user
+    possible_boxes = []
       @boxes.each do |box|
-  	    if(box[:contents] - user[:received_contents]) == box[:contents] 
+        if(box[:contents] - user[:received_contents]) == box[:contents]
           possible_boxes << box[:code]
-        end 
+        end
       end
-      users_possible_boxes << {name: user[:name], possible_boxes: possible_boxes }
-    end 
-    users_possible_boxes
-  end 
-end 
+    possible_boxes
+  end
+end
 
-# Here is a list of users and the contents they have received already.
+#Given a list of users and the contents they have received already.
 users = [
   { name: 'Steve', received_contents: ['1a', '1b', '3c'] },
   { name: 'Virginie', received_contents: ['3a', '2b', '3c'] },
@@ -44,6 +39,10 @@ boxes = [
   {code: 'gr5', contents: ['3b', '1c']},
 ]
 
-sort = Sorting.new(users, boxes)
+users_possible_boxes = []
+sorting = Sorting.new(boxes)
+users.each do |user|
+  users_possible_boxes << {name: user[:name], possible_boxes: sorting.compare(user) }
+end
 
-p sort.compare
+p users_possible_boxes

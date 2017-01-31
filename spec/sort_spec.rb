@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Sorting do
   describe "#compare" do
     context "find out what boxes users can get so that they won't get repeated contents" do
-      let(:sort) { Sorting.new(users, boxes) }
-      
+      let(:sort) { Sorting.new(boxes) }
+
       let(:users) do 
         [{ name: 'Steve', received_contents: ['1a', '1b', '3c'] },
          { name: 'Virginie', received_contents: ['3a', '2b', '3c'] },
@@ -25,7 +25,7 @@ describe Sorting do
          {code: 'gr5', contents: ['3b', '1c']}]
       end 
 
-      let(:users_possible_boxes) do 
+      let(:expected_boxes) do 
         [{:name=>"Steve", :possible_boxes=>["gr5"]}, 
          {:name=>"Virginie", :possible_boxes=>["gr1", "gr3", "gr5"]}, 
          {:name=>"Fiona", :possible_boxes=>["gr2", "gr4"]}, 
@@ -37,8 +37,12 @@ describe Sorting do
          {:name=>"Thomas", :possible_boxes=>["gr3", "gr5"]}]
       end 
  
-      it "find out what boxes users can get so that they won't get repeated contents" do
-        expect(sort.compare).to match_array (users_possible_boxes)
+      it "return array of boxes to each user that have unique contents" do
+        users_possible_boxes = []
+        users.each do |user|
+          users_possible_boxes << {name: user[:name], possible_boxes: sort.compare(user)}
+        end
+        expect(users_possible_boxes).to match_array (expected_boxes)
       end
     end 
   end 
