@@ -1,5 +1,4 @@
 require 'pry'
-require 'rspec/autorun'
 
 class Sorting
   def initialize users, boxes 
